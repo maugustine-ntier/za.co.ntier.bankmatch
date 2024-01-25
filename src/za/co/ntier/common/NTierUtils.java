@@ -19,13 +19,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+
 
 import org.adempiere.exceptions.AdempiereException;
 import org.adempiere.util.Callback;
@@ -58,8 +52,6 @@ import org.compiere.util.CLogger;
 import org.compiere.util.CacheMgt;
 import org.compiere.util.DB;
 import org.compiere.util.Env;
-import org.w3c.dom.Node;
-import org.zkoss.zk.ui.Component;
 
 /**
  * @author NCG
@@ -296,7 +288,7 @@ public class NTierUtils {
 	 * Reference: Error that occurred after upgrading from Release 1.0 to Release 2.0, 
 	 * 	"Components can be accessed only in event listeners"
 	 */
-	public static void showDialogInfo(int windowNo, Component comp, String message, Callback<Integer> callback)
+	public static void showDialogInfo(int windowNo, String message, Callback<Integer> callback)
     {
     	Properties ctx = Env.getCtx();
 		String s = message.toString().replace("\n", "<br>");
@@ -317,7 +309,7 @@ public class NTierUtils {
 			
 			@Override
 			public void run() {
-				showDialogInfo(0, null, msg, callback);
+				showDialogInfo(0,  msg, callback);
 			}
 		};
 		AEnv.executeAsyncDesktopTask(runnable);
@@ -594,33 +586,7 @@ public class NTierUtils {
 	}
 	
 	
-	/**
-	 * Print XML document to console
-	 * NCG
-	 */
-	public static void XMLNodePrint(Node document) {
-		System.out.println(XMLNodeAsString(document));
-	}
-	
-	/**
-	 * Print XML document to console
-	 * NCG
-	 */
-	public static String XMLNodeAsString(Node document) {
-		try {
-			Source source = new DOMSource(document);
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			Result result = new StreamResult(bos);
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			xformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-			xformer.transform(source, result);
-			return bos.toString();
-		} catch (Exception e) {
-			throw new AdempiereException(e);
-		}
-	}
-	
+
 	/**
 	 * Lookup the default tax category 
 	 */
